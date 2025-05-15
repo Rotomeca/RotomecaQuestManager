@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2024",
+    "jsx": "react",
+    "allowImportingTsExtensions": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true
+  },
+  "exclude": [],
+  "include": [
+    "**/node_modules/@rotomeca/framework-electron/framework/front/**/*.js"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "rotomecaquestmanager",
+  "version": "1.0.0",
+  "description": "Gestionnaire de quêtes pour l'univers Rotomeca",
+  "main": "main.js",
+  "author": "Rotomeca",
+  "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "_start": "electron .",
+    "_make": "electron-forge make",
+    "rotomeca": "rotomeca",
+    "start": "npm run debug",
+    "debug": "rotomeca test",
+    "make": "rotomeca build",
+    "page": "rotomeca page"
+  },
+  "dependencies": {
+    "@rotomeca/framework-electron": "^1.0.1",
+    "eslint": "^8.57.1",
+    "prettier": "^3.5.3",
+    "prettier-eslint": "^16.4.2"
+  },
+  "devDependencies": {
+    "electron": "^36.2.0"
+  }
+}
