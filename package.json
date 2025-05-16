@@ -16,7 +16,7 @@
     "page": "rotomeca page"
   },
   "dependencies": {
-    "@rotomeca/framework-electron": "^1.0.1",
+    "@rotomeca/framework-electron": "^1.0.2",
     "eslint": "^8.57.1",
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.4.2"

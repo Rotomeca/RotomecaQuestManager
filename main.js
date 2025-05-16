@@ -1,5 +1,5 @@
-const Rotomeca = require("@rotomeca/framework-electron");
-const { Menu, dialog } = require("electron");
+const Rotomeca = require('@rotomeca/framework-electron');
+const { Menu, dialog } = require('electron');
 
 class Index extends Rotomeca.Abstract.AAppObject {
   main() {
@@ -25,15 +25,15 @@ class Index extends Rotomeca.Abstract.AAppObject {
     }
     let menu = Menu.buildFromTemplate([
       {
-        label: "Fichier",
+        label: 'Fichier',
         submenu: [
           {
-            label: "Ouvrir un dossier",
-            accelerator: "CmdOrCtrl+O",
+            label: `Ouvrir un${this.folderPath ? ' autre' : Rotomeca.EMPTY_STRING} dossier`,
+            accelerator: 'CmdOrCtrl+O',
             click: async () => {
               const result = await dialog.showOpenDialog(mainWindow, {
-                properties: ["openDirectory"],
-                title: "Sélectionner un repertoire RPG Maker MZ",
+                properties: ['openDirectory'],
+                title: 'Sélectionner un repertoire RPG Maker MZ',
               });
 
               if (result.canceled) return;
@@ -45,10 +45,17 @@ class Index extends Rotomeca.Abstract.AAppObject {
               );
             },
           },
-          { type: "separator" },
           {
-            label: "Quitter",
-            accelerator: "CmdOrCtrl+Q",
+            label: 'Sauvegarder',
+            accelerator: 'CmdOrCtrl+S',
+            click: async () => {},
+            enabled:
+              this.folderPath && this.folderPath !== Rotomeca.EMPTY_STRING,
+          },
+          { type: 'separator' },
+          {
+            label: 'Quitter',
+            accelerator: 'CmdOrCtrl+Q',
             click: () => {
               this.quit();
             },
@@ -59,24 +66,23 @@ class Index extends Rotomeca.Abstract.AAppObject {
 
     Menu.setApplicationMenu(menu);
 
-    let mainWindow = this.createBrowserWindow("default", {
+    let mainWindow = this.createBrowserWindow('default', {
+      page:
+        !this.isNullOrUndefined(this.folderPath) &&
+        this.folderPath !== Rotomeca.EMPTY_STRING
+          ? 'database'
+          : 'default',
       windowConfig: {
         show: false,
       },
     });
 
-    mainWindow.webContents.on("dom-ready", () => {
+    mainWindow.webContents.on('dom-ready', () => {
       mainWindow.webContents.executeJavaScript(`
         window.rotomeca = ${JSON.stringify({ folderPath: this.folderPath })};`);
     });
 
-    mainWindow.addEnv("folderPath", this.folderPath);
-
-    if (
-      !this.isNullOrUndefined(this.folderPath) &&
-      this.folderPath !== Rotomeca.EMPTY_STRING
-    )
-      mainWindow.changePage("database");
+    mainWindow.addEnv('folderPath', this.folderPath);
 
     mainWindow.show();
     mainWindow.webContents.openDevTools();
