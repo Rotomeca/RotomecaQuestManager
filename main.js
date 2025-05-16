@@ -1,5 +1,6 @@
 const Rotomeca = require('@rotomeca/framework-electron');
-const { Menu, dialog } = require('electron');
+const { Menu } = require('electron');
+const FileManager = require('./classes/FileManager');
 
 class Index extends Rotomeca.Abstract.AAppObject {
   main() {
@@ -31,18 +32,14 @@ class Index extends Rotomeca.Abstract.AAppObject {
             label: `Ouvrir un${this.folderPath ? ' autre' : Rotomeca.EMPTY_STRING} dossier`,
             accelerator: 'CmdOrCtrl+O',
             click: async () => {
-              const result = await dialog.showOpenDialog(mainWindow, {
-                properties: ['openDirectory'],
-                title: 'Sélectionner un repertoire RPG Maker MZ',
-              });
+              const result = await FileManager.LoadProject();
 
-              if (result.canceled) return;
+              if (!result) return;
 
-              this.folderPath = result.filePaths[0];
+              this.folderPath = result;
+              mainWindow.addEnv('folderPath', this.folderPath);
               this.saveSettings({ folderPath: this.folderPath });
-              mainWindow.webContents.executeJavaScript(
-                `window.rotomeca = ${JSON.stringify({ folderPath: this.folderPath })};`,
-              );
+              mainWindow.changePage('database');
             },
           },
           {

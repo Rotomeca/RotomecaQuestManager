@@ -1,5 +1,5 @@
-import { EMPTY_STRING } from "@rotomeca/framework-electron.js";
-import ISerializable from "../interfaces/ISerializable.js";
+import { EMPTY_STRING } from '@rotomeca/framework-electron.js';
+import ISerializable from '../interfaces/ISerializable.js';
 export {
   QuestType,
   QuestStepType,
@@ -17,6 +17,7 @@ export default class QuestStructure extends ISerializable {
     steps = [],
     rewards = [],
   } = {}) {
+    super();
     this.#_init().#_setup({
       name,
       description,
@@ -62,7 +63,7 @@ export default class QuestStructure extends ISerializable {
 
   #_serializeArray(array) {
     return array.map((item) => {
-      if (typeof item === "object" && item !== null && item.serialize) {
+      if (typeof item === 'object' && item !== null && item.serialize) {
         return item.serialize();
       }
       return item;
@@ -73,7 +74,7 @@ export default class QuestStructure extends ISerializable {
     if (step instanceof QuestStepStructure) {
       this.steps.push(step);
     } else {
-      throw new Error("Invalid step type");
+      throw new Error('Invalid step type');
     }
   }
 
@@ -81,7 +82,7 @@ export default class QuestStructure extends ISerializable {
     if (reward instanceof QuestRewardStructure) {
       this.rewards.push(reward);
     } else {
-      throw new Error("Invalid reward type");
+      throw new Error('Invalid reward type');
     }
   }
 
@@ -122,8 +123,8 @@ export default class QuestStructure extends ISerializable {
  * @property {Symbol} SIDE
  */
 const QuestType = {
-  MAIN: Symbol("main"),
-  SIDE: Symbol("side"),
+  MAIN: Symbol('main'),
+  SIDE: Symbol('side'),
 };
 
 class QuestStepStructure extends ISerializable {
@@ -200,15 +201,15 @@ class QuestStepStructure extends ISerializable {
  * @property {Symbol} CUSTOM
  */
 const QuestStepType = {
-  VARIABLE: Symbol("variable"),
-  SWITCH: Symbol("switch"),
-  LOCATION: Symbol("location"),
-  TALKING: Symbol("talking"),
-  ENNEMY: Symbol("ennemy"),
-  ITEMS: Symbol("items"),
-  WEAPONS: Symbol("weapons"),
-  ARMORS: Symbol("armors"),
-  CUSTOM: Symbol("custom"),
+  VARIABLE: Symbol('variable'),
+  SWITCH: Symbol('switch'),
+  LOCATION: Symbol('location'),
+  TALKING: Symbol('talking'),
+  ENNEMY: Symbol('ennemy'),
+  ITEMS: Symbol('items'),
+  WEAPONS: Symbol('weapons'),
+  ARMORS: Symbol('armors'),
+  CUSTOM: Symbol('custom'),
 };
 
 /**
@@ -223,14 +224,14 @@ const QuestStepType = {
  * @property {Symbol} CUSTOM
  */
 const QuestRewardType = {
-  VARIABLE: Symbol("variable"),
-  SWITCH: Symbol("switch"),
-  GOLD: Symbol("gold"),
-  ITEM: Symbol("item"),
-  ARMOR: Symbol("armor"),
-  WEAPON: Symbol("weapon"),
-  QUEST: Symbol("quest"),
-  CUSTOM: Symbol("custom"),
+  VARIABLE: Symbol('variable'),
+  SWITCH: Symbol('switch'),
+  GOLD: Symbol('gold'),
+  ITEM: Symbol('item'),
+  ARMOR: Symbol('armor'),
+  WEAPON: Symbol('weapon'),
+  QUEST: Symbol('quest'),
+  CUSTOM: Symbol('custom'),
 };
 
 // --- QuestRewardStructure class ---
