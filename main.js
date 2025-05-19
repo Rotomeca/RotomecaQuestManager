@@ -16,6 +16,7 @@ class Index extends Rotomeca.Abstract.AAppObject {
   }
 
   async mainAsync() {
+    var projectData = null;
     {
       // Chargement des fichiers de configuration
       const data = await this.loadSettingsData();
@@ -74,12 +75,18 @@ class Index extends Rotomeca.Abstract.AAppObject {
       },
     });
 
+    mainWindow.addEnv('folderPath', this.folderPath);
+
+    if (this.folderPath) {
+      projectData = await FileManager.LoadProjectData(this.folderPath);
+
+      mainWindow.addEnv('projectName', projectData.title);
+    }
+
     mainWindow.webContents.on('dom-ready', () => {
       mainWindow.webContents.executeJavaScript(`
-        window.rotomeca = ${JSON.stringify({ folderPath: this.folderPath })};`);
+        window.rotomeca = ${JSON.stringify({ folderPath: this.folderPath, projectName: projectData.title })};`);
     });
-
-    mainWindow.addEnv('folderPath', this.folderPath);
 
     mainWindow.show();
     mainWindow.webContents.openDevTools();

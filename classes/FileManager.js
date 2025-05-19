@@ -1,6 +1,9 @@
-const { FILE_SEPARATOR } = require('@rotomeca/framework-electron');
+const {
+  FILE_SEPARATOR,
+  EMPTY_STRING,
+} = require('@rotomeca/framework-electron');
 const RotomecaPromise = require('@rotomeca/promise');
-const { dialog } = require('electron');
+const { dialog, app } = require('electron');
 
 class FileManager {
   constructor() {}
@@ -75,6 +78,69 @@ class FileManager {
       }
 
       return returnData;
+    });
+  }
+
+  /**
+   *
+   * @param {string} path
+   * @returns {RotomecaPromise<ProjectData>}
+   */
+  static LoadProjectData(path) {
+    return new RotomecaPromise(this.#_LoadProjectData.bind(this, path));
+  }
+
+  /**
+   *
+   * @param {*} path
+   * @param {import('@rotomeca/promise').PromiseManager} manager
+   * @returns {Promise<ProjectData>}
+   */
+  static async #_LoadProjectData(path, manager) {
+    const fs = require('fs');
+    let promises = [];
+    //Récupération du titre
+    promises.push(fs.promises.readFile(`${path}${FILE_SEPARATOR}package.json`));
+
+    /**
+     * @type {PromiseSettledResult<Buffer>[]}
+     */
+    const data = await RotomecaPromise.AllSettled(...promises);
+
+    if (manager.state() === RotomecaPromise.PromiseStates.cancelled)
+      return false;
+
+    return new ProjectData({
+      title: data[0].value.toString(),
+    });
+  }
+}
+
+class ProjectData {
+  #_title = EMPTY_STRING;
+  constructor({ title }) {
+    this.#_setup({ title });
+  }
+
+  #_setup({ title }) {
+    try {
+      this.#_title = JSON.parse(title).window.title;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * @type {string}
+   * @readonly
+   */
+  get title() {
+    return this.#_title;
+  }
+
+  serialize() {
+    return JSON.stringify({
+      title: this.title,
     });
   }
 }
